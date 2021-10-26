@@ -1,33 +1,61 @@
-import { createSection, DataSet, DataSetUtils, Section } from '@azurapi/azurapi';
+import { createSection, createStore, Section } from '@atsu/taihou';
+import { Identifiable } from '@azurapi/azurapi';
 import { Barrage } from '../../types/barrages';
 import { Chapter } from '../../types/chapters';
 import { Equipment } from '../../types/equipment/category';
 import { Ship } from '../../types/ships/ship';
-import { Voiceline } from '../../types/voicelines';
+import { Voicelines } from '../../types/voicelines';
+import { isArray } from '../utils';
 
-export type Datatype = keyof AzurAPIState;
-export interface AzurAPIState {
-  ships: Section<DataSet<Ship>>;
-  barrages: Section<DataSet<Barrage>>;
-  equipments: Section<DataSet<Equipment>>;
-  voicelines: Section<DataSet<Voiceline>>;
-  chapters: Section<DataSet<Chapter>>;
+export type GenState = Ship | Barrage | Equipment | Voicelines | Chapter;
+
+export type Datatype = keyof FormidableState;
+export interface FormidableState {
+  ships: Record<string, Ship>;
+  barrages: Record<string, Barrage>;
+  equipments: Record<string, Equipment>;
+  voicelines: Record<string, Voicelines>;
+  chapters: Record<string, Chapter>;
 }
 
-const setDataSet = <P, S extends DataSet<P>>(payload: P[], state: S) => {
-  state.array = payload;
-  state.dict = DataSetUtils.createDictionary(payload, 'id');
+interface UpdatePayload {
+  type: Datatype;
+  value: Record<string, any>;
+}
+
+export enum StoreActions {
+  update = 'update',
+}
+
+export type FormidableSection = Section<FormidableState, StoreActions, ''>;
+
+export const initStore = () => {
+  const { store } = createStore({
+    formidable: createSection<FormidableState, StoreActions, ''>({
+      state: {
+        ships: {},
+        barrages: {},
+        equipments: {},
+        voicelines: {},
+        chapters: {},
+      },
+
+      actions: {
+        update: ({ type, value }: UpdatePayload, state) => {
+          const update = { ...state[type], ...value };
+          return { ...state, [type]: { ...state[type], ...update } };
+        },
+      },
+    }),
+  });
+
+  return store;
 };
 
-const defaultActions = () => ({ set: setDataSet });
-const defaultDataSet = <T>(): DataSet<T> => ({ dict: {}, array: [] });
-export const createStateManager = (): AzurAPIState => ({
-  ships: createSection<DataSet<Ship>>({ state: defaultDataSet(), actions: defaultActions() }),
-  barrages: createSection<DataSet<Barrage>>({ state: defaultDataSet(), actions: defaultActions() }),
-  equipments: createSection<DataSet<Equipment>>({ state: defaultDataSet(), actions: defaultActions() }),
-  chapters: createSection<DataSet<Chapter>>({ state: defaultDataSet(), actions: defaultActions() }),
-  voicelines: createSection<DataSet<Voiceline>>({ state: defaultDataSet(), actions: defaultActions() }),
-});
+export const prepareRecord = <T extends Identifiable>(value: T | T[]): Record<string, T> => {
+  let obj = {} as Record<string, T>;
+  if (isArray(value)) value.forEach(item => (obj[item.id] = item));
+  else obj[value.id] = value;
 
-export type ClientStateDispatcher = ReturnType<typeof createDispatcher>;
-export const createDispatcher = (state: AzurAPIState) => ({}); //TODO: Implement me
+  return obj;
+};

@@ -1,10 +1,10 @@
 import { BarragesAPI } from '../api/barrage';
 import { ChaptersAPI } from '../api/chapter';
 import { EquipmentsAPI } from '../api/equipment';
-import { ShipsAPI } from '../api/ships';
+import { ShipsAPI } from '../api/ship';
 import { VoicelinesAPI } from '../api/voiceline';
-import { AzurAPIState, ClientStateDispatcher } from '../state';
-import { FormidableCoreAPI, createLocalClient, FormidableClientOptions } from './localClient';
+import { FormidableState } from '../state';
+import { FormidableCoreAPI, createLocalClient, FormidableClientOptions } from './client';
 import { ClientTools } from '@azurapi/azurapi';
 
 export class FormidableAPI {
@@ -15,8 +15,7 @@ export class FormidableAPI {
   public voicelines: VoicelinesAPI;
   public barrages: BarragesAPI;
   public api: FormidableCoreAPI;
-  public state: AzurAPIState;
-  public dispatch: ClientStateDispatcher;
+  public state: FormidableState;
   public tools: ClientTools;
 
   constructor(options: Partial<FormidableClientOptions> = {}) {
@@ -29,7 +28,6 @@ export class FormidableAPI {
     this.voicelines = client.api.voicelines;
     this.barrages = client.api.barrages;
     this.state = client.state;
-    this.dispatch = client.dispatch;
     this.tools = client.tools;
   }
 }
