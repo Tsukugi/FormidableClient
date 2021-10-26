@@ -18,7 +18,7 @@ export interface Hull {
   enhanceValue: EnhanceValue | null;
   scrapValue: ScrapValue | null;
   skills: Skill[];
-  limitBreaks?: Array<LimitBreak[]>;
+  limitBreaks?: LimitBreak[][];
   fleetTech: FleetTech;
   construction: Construction;
   obtainedFrom: ObtainedFromClass;
@@ -157,7 +157,7 @@ export interface ShipNames {
 
 export interface ObtainedFromClass {
   obtainedFrom?: string;
-  fromMaps: Array<FromMapClass | string>;
+  fromMaps: (FromMapClass | string)[];
 }
 
 export interface FromMapClass {

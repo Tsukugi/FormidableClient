@@ -210,5 +210,3 @@ export enum Focus {
 export enum Name {
   DDGun = 'DD Gun',
 }
-
-
