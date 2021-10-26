@@ -1,4 +1,5 @@
 export interface Chapter {
+  id: string;
   names: Names;
   normal: Normal;
   hard: Hard;
