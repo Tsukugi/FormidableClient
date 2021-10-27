@@ -1,5 +1,5 @@
 {
-  "name": "@tsukugi/formidable-client",
+  "name": "@atsu/formidable-client",
   "version": "1.0.1",
   "description": "A client for Formidable servers written in TypeScript",
   "main": "./build/azurapi.umd.bundle.js",
@@ -39,6 +39,10 @@
   ],
   "bugs": {
     "url": "https://github.com/Tsukugi/FormidableClient/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "homepage": "https://github.com/Tsukugi/FormidableClient#readme",
   "dependencies": {
