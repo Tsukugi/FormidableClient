@@ -47,7 +47,7 @@
   "homepage": "https://github.com/Tsukugi/FormidableClient#readme",
   "dependencies": {
     "@atsu/multi-env-impl": "^1.0.3",
-    "@atsu/taihou": "^0.1.4",
+    "@atsu/taihou": "^0.2.0",
     "@azurapi/azurapi": "github:Tsukugi/azurapi-js#release"
   },
   "devDependencies": {
